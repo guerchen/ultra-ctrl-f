@@ -3,6 +3,17 @@ import logo from './logo.svg';
 import './App.css';
 
 function App() {
+  let urls:string[] = [];
+
+  function logURL(requestDetails:any) {
+    urls.push(requestDetails.url);
+  }
+  
+  chrome.webRequest.onBeforeRequest.addListener(
+    logURL,
+    {urls: ["<all_urls>"]}
+  );
+  
   return (
     <div className="App">
       <header className="App-header">
@@ -10,14 +21,7 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <div>{urls}</div>
       </header>
     </div>
   );
