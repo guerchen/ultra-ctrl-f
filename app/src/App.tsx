@@ -11,6 +11,7 @@ function App() {
     'timestamp': null as number|unknown
   };
   const regex = new RegExp(/[^\s]+(.*?).(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$/);
+  let reference_image:string;
 
   function logURL(requestDetails:any) {
     if (regex.test(requestDetails.url)) {
@@ -33,9 +34,13 @@ function App() {
   const analyseImages = () => {
     let dateTimeNow = Date.now();
     pageData.timestamp = dateTimeNow
-    axios.post(`http://localhost:8000/`, pageData)
+    axios.post(`http://localhost:8000/save`, pageData)
       .then(res => {
-        console.log(res.data);
+        console.log('save',res.data);
+        axios.post(`http://localhost:8000/compare`, {"url": pageData.url,"reference_image":reference_image})
+          .then(res => {
+            console.log('compare',res.data);
+          })
       })
   }
   
