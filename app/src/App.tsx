@@ -1,16 +1,18 @@
 import React from 'react';
 import axios from 'axios';
-import logo from './logo.svg';
 import './App.css';
+import Uploader from './components/uploader';
 
 function App() {
-  let urls:string[] = [];
+  /*let urls:string[] = [];
   let pageData = {
     'url': null as string|unknown,
     'images': urls,
     'timestamp': null as number|unknown
   };
+
   const regex = new RegExp(/[^\s]+(.*?).(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$/);
+
   let reference_image:string;
 
   function logURL(requestDetails:any) {
@@ -42,14 +44,15 @@ function App() {
             console.log('compare',res.data);
           })
       })
-  }
+  }*/
   
   return (
     <div className="App">
       <header className="App-header">
-        <button onClick={analyseImages}>
+{/*         <button onClick={analyseImages}>
           Analyse images
-        </button>
+        </button> */}
+        <Uploader />
       </header>
     </div>
   );
