@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import './uploader.css';
 
-interface FileProps {
-    setSelectedFile: (selectedFile:string) => void,
-    setIsFileSelected: (isFileSelected:boolean) => void;
-  }
+interface FileProps{
+    setSelectedFile: (selectedFile:string) => void
+}
 
 function Uploader(props:FileProps) {
     const reader = new FileReader();
@@ -13,13 +12,11 @@ function Uploader(props:FileProps) {
         reader.readAsDataURL(event.target.files[0]);
         reader.onload = () => {
             props.setSelectedFile(reader.result as string);
-            props.setIsFileSelected(true);
           }
 	};
 
     const removeSelected = () => {
         props.setSelectedFile("")
-        props.setIsFileSelected(false)
     }
 
     return(

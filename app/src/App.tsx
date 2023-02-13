@@ -31,7 +31,6 @@ function App() {
   );
 
   const [selectedFile, setSelectedFile] = useState("");
-  const [isFileSelected, setIsFileSelected] = useState(false);
 
   const analyseImages = () => {
     let dateTimeNow = Date.now();
@@ -49,8 +48,8 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <Uploader passUploadData={{setSelectedFile,setIsFileSelected}}/>
-        {!isFileSelected  ? '' :
+        <Uploader setSelectedFile={setSelectedFile}/>
+        {selectedFile == ''  ? '' :
             <div>
                 <img className="uploadedImage" src={selectedFile} alt="reference_image"/>
             </div>
