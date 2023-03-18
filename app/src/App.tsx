@@ -31,6 +31,7 @@ function App() {
   );
 
   const [selectedFile, setSelectedFile] = useState("");
+  const [similarImages,setSimilarImages] = useState([]);
 
   const analyseImages = () => {
     let dateTimeNow = Date.now();
@@ -38,9 +39,11 @@ function App() {
     axios.post(`http://localhost:8000/save`, pageData)
       .then(res => {
         console.log('save',res.data);
+        console.log('selected',selectedFile)
         axios.post(`http://localhost:8000/compare`, {"url": pageData.url,"reference_image":selectedFile})
           .then(res => {
             console.log('compare',res.data);
+            setSimilarImages(res.data.similar);
           })
     })
   }
@@ -57,6 +60,10 @@ function App() {
         <button onClick={analyseImages}>
           Analyse images
         </button>
+        <div>
+          {similarImages.map((image,index) =>
+          <img src={image} alt={`result_${index}`}/>)}
+        </div>
       </header>
     </div>
   );
