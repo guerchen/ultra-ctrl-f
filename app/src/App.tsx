@@ -11,19 +11,21 @@ function App() {
     'timestamp': null as number|unknown
   };
 
-  //TODO: move this logic to content script
-  const getImagesFromPage = () => {
-    document.querySelectorAll('img').forEach((tag) => {
-      urls.push(tag.src);
-    });
+  const getImagesFromPage = async ():Promise<string[]> => {
+    const tabs = await chrome.tabs.query({ active: true, lastFocusedWindow: true});
+    var tabId = tabs[0].id as any;
+    const response = await chrome.tabs.sendMessage(tabId,{type: 'getImages'});
+    return response
   }
 
   const [selectedFile, setSelectedFile] = useState("");
   const [similarImages,setSimilarImages] = useState([]);
 
-  const analyseImages = () => {
+  const analyseImages = async () => {
     let dateTimeNow = Date.now();
-    pageData.timestamp = dateTimeNow
+    urls = await getImagesFromPage();
+    console.log(pageData);
+    pageData.timestamp = dateTimeNow;
     axios.post(`http://localhost:8000/compare`, {"url": pageData.url,"reference_image":selectedFile})
       .then(res => {
         console.log('compare',res.data);
