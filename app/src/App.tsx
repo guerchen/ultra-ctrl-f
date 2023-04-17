@@ -11,24 +11,12 @@ function App() {
     'timestamp': null as number|unknown
   };
 
-  function logURL(requestDetails:any) {
-    const regex = new RegExp(/[^\s]+(.*?).(jpg|jpeg|png|gif|JPG|JPEG|PNG|GIF)$/);
-    if (regex.test(requestDetails.url)) {
-      urls.push(requestDetails.url);
-      console.log(pageData);
-    }
+  //TODO: move this logic to content script
+  const getImagesFromPage = () => {
+    document.querySelectorAll('img').forEach((tag) => {
+      urls.push(tag.src);
+    });
   }
-
-  chrome.tabs.query({active:true},function(tab){
-    let currentTabUrl = tab[0].url;
-    pageData.url = currentTabUrl;
-    console.log(currentTabUrl)
-  });
-
-  chrome.webRequest.onBeforeRequest.addListener(
-    logURL,
-    {urls: ["<all_urls>"]}
-  );
 
   const [selectedFile, setSelectedFile] = useState("");
   const [similarImages,setSimilarImages] = useState([]);
@@ -36,16 +24,11 @@ function App() {
   const analyseImages = () => {
     let dateTimeNow = Date.now();
     pageData.timestamp = dateTimeNow
-    axios.post(`http://localhost:8000/save`, pageData)
+    axios.post(`http://localhost:8000/compare`, {"url": pageData.url,"reference_image":selectedFile})
       .then(res => {
-        console.log('save',res.data);
-        console.log('selected',selectedFile)
-        axios.post(`http://localhost:8000/compare`, {"url": pageData.url,"reference_image":selectedFile})
-          .then(res => {
-            console.log('compare',res.data);
-            setSimilarImages(res.data.similar);
-          })
-    })
+        console.log('compare',res.data);
+        setSimilarImages(res.data.similar);
+      })
   }
   
   return (
@@ -56,7 +39,7 @@ function App() {
             <div>
                 <img className="uploadedImage" src={selectedFile} alt="reference_image"/>
             </div>
-            }
+            }  
         <button onClick={analyseImages}>
           Analyse images
         </button>

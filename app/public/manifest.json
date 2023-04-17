@@ -6,11 +6,5 @@
   "action": {
     "default_popup": "index.html",
     "default_icon": "logo192.png"
-  },
-  "host_permissions": [
-    "<all_urls>"
-  ],
-  "permissions": [
-    "webRequest"
-  ]
+  }
 }
